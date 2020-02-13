@@ -26,6 +26,7 @@ class Button extends Component {
             iconType,
             disabled,
             authority,
+            visible = true,
             isAction = false,
             ...other
         } = this.props;
@@ -33,6 +34,13 @@ class Button extends Component {
         let classname = (disabled && authority) && `${className || ''} btn-authority-disabled` || `${className || ''}`;
         if (isAction) {
             classname += ' action-button'
+        }
+        if(!visible){
+            if(style){
+                Object.assign(style,{display:'none'});
+            } else {
+                style = {display:'none'};
+            }  
         }
         return (
             <BeeButton

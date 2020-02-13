@@ -3,19 +3,35 @@ import axios from "axios";
 import cloneDeep from 'clone-deep';
 
 export const success = (msg) => {
-    Message.create({content: msg, color: 'success', duration: 3});
+    Message.destroy();
+    Message.config({
+        top: 200,
+    });
+    Message.create({content: msg,color: 'success',duration: 3});
 }
 
 export const Error = (msg) => {
-    Message.create({content: msg, color: 'danger'});
+    Message.destroy();
+    Message.config({
+        top: 200,
+    });
+    Message.create({content: msg,color: 'danger'});
 }
 
 export const Warning = (msg) => {
-    Message.create({content: msg, color: 'warning', duration: 3});
+    Message.destroy();
+    Message.config({
+        top: 200,
+    });
+    Message.create({content: msg,color: 'warning',duration: 3});
 }
 
 export const Info = (msg) => {
-    Message.create({content: msg, color: 'info', duration: 3});
+    Message.destroy();
+    Message.config({
+        top: 100,
+    });
+    Message.create({content: msg,color: 'info',duration: 3});
 }
 /**
  * 数据返回统一处理函数
@@ -26,38 +42,34 @@ export const processData = (response, successMsg) => {
     let result={};
     try {
         if (typeof response != 'object') {
-            Error('数据返回出错：1、请确保服务运行正常；2、请确保您的前端工程代理服务正常；3、请确认您已在本地登录过应用平台');
+            Error('系统错误,请联系管理员!');
             // throw new Error('数据返回出错：1、请确保服务运行正常；2、请确保您的前端工程代理服务正常；3、请确认您已在本地登录过应用平台')
-            return {result:null};
+            return {data:null};
         }
         if (response.status == '401') {
             Error(`错误:${(response.data.msg)}`);
-            // throw new Error(`错误:${(response.data.msg)}`);
-            return {result:null};
+            return {data:null};
+        }
+        if(String(response.status) == '500'){   //处理后台抛出异常  如果是登录token失效 则跳转回登录页  否则显示异常信息 结果集为null
+            if(typeof(response.data.message) == 'string' && response.data.message.indexOf("token") != -1){
+                window.top.location.href = `/login`;  //登录token失效  返回登录页
+            }
+            Error(`错误:${(response.data.message)}`);
+            return {data:null};
         }
         if (response.status == '200') {
             let data = response.data;
-            let repMsg = data.success;
-            if (repMsg == 'success') {
-                if (successMsg) {
-                    success(successMsg);
-                }
-                result.status = repMsg;
-                // 删除成功没有 data 值
-                result.data = data.detailMsg.data || {};
-                return {result};
-            } else if (repMsg == 'fail_field') {
-                Error(`错误:${(data && data.detailMsg && convert(data.detailMsg.msg)) || '数据返回出错'}`);
-                // throw new Error(`错误:${(data && data.detailMsg && convert(data.detailMsg.msg)) || '数据返回出错'}`)
-                return {result:null};
-            } else {
-                Error(`错误:${convert(data.message)}`);
-                // throw new Error(`错误:${convert(data.message)}`);
-                return {result:null};
+            if(typeof(data) == 'string'&&data.indexOf("token") != -1 ){
+                window.top.location.href = `/login`;  //token验证失败  返回登录页
             }
+            if (successMsg) {
+                success(successMsg);
+            } else if (response.data.msg){
+                success(response.data.msg);
+            }
+            return data;
         } else {
             Error('请求错误');
-            // throw new Error(`错误:${(response.status)}`);
         }
 
     } catch (e) {
@@ -256,7 +268,6 @@ export function addChild(parentArray = [], childArray = []) {
         } else {
             let temp = item['children'];
             if (typeof temp !== 'undefined' && Array.isArray(temp) && temp.length) {
-                console.log("item['children']", item['children']);
                 setTimeout(function () {
                     addChild(item['children'], childArray);
                 }, 0);
@@ -642,3 +653,25 @@ export function getValidateFieldsTrim(values) {
     return values;
 }
 
+export const flattenJsonId = (data,arr) => {
+    data.map(e => {
+         if (e.hasOwnProperty('children') && Array.isArray(e.children) && e.children.length > 0) {
+           flattenJsonId(e.children,arr);
+         }else {
+           arr.push(e);
+         }
+     });
+  }
+  
+  export function getConfig(){
+      return window.iuapConfig || window.parent.iuapConfig || window.top.iuapConfig || {};
+  }
+  
+  export function getContextId(){
+      let config = window.iuapConfig || window.parent.iuapConfig || window.top.iuapConfig || {}
+      // return config.context || 'mdm';
+      // return 'mdm'
+      return config.context || 'leasing';
+  }
+
+  

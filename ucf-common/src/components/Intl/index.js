@@ -5,9 +5,9 @@ import zh from 'react-intl/locale-data/zh';
 import mirror, { connect,withRouter } from 'mirrorx';
 import {getCookie} from "utils";
 import Locale from 'bee-locale';
-import zhCN from './locales/iuap_zh_CN';
-import enUS from './locales/iuap_en_US';
-import zhTW from './locales/iuap_zh_TW';
+import zhCN from './locales/zh';
+import enUS from './locales/en';
+import zhTW from './locales/zh_TW';
   
 import tinperZh from 'bee-locale/build/zh_CN';    
 import tinperTw from 'bee-locale/build/zh_TW';    

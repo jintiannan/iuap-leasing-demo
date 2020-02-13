@@ -92,7 +92,7 @@ class SelectField extends Component {
         let { value } = this.state;
         //设置校验规则
         let descriptor = {
-            [field]: { type: "number", required }
+            // [field]: { type: "number", required }
         }
         let validator = new schema(descriptor);
         validator.validate({ [field]: value }, (errors, fields) => {

@@ -25,7 +25,7 @@ class MdmRefComp extends Component {
             title: '',
             fullclassname: '',
             pk_gd: '',
-            type: '',
+            type: 'grid',
             pk_entityitem: '',
             refPkGd: '',
             pkField: '',
@@ -49,29 +49,29 @@ class MdmRefComp extends Component {
         this.loadTableData = this.loadTableData.bind(this);
     }
     componentWillMount() {
-        this.initComponent();
+        //this.initComponent();
     }
 
-    shouldComponentUpdate(nextProps){
-        if(nextProps.className != this.props.className){
-            return true;
-        }
-        if(nextProps.pk_entityitem && nextProps.pk_gd){
-            if(nextProps.pk_entityitem === this.props.pk_entityitem && nextProps.pk_gd === this.props.pk_gd){
-                return false;
-            }
-            this.initComponent(nextProps)
-            return true;
-        }
-        if(nextProps.entityItemCode && nextProps.entityCode){
-            if(nextProps.entityItemCode === this.props.entityItemCode && nextProps.entityCode === this.props.entityCode){
-                return false;
-            }
-            this.initComponent(nextProps)
-            return true;
-        }
-        return false;
-    }
+    // shouldComponentUpdate(nextProps){
+    //     if(nextProps.className != this.props.className){
+    //         return true;
+    //     }
+    //     if(nextProps.pk_entityitem && nextProps.pk_gd){
+    //         if(nextProps.pk_entityitem === this.props.pk_entityitem && nextProps.pk_gd === this.props.pk_gd){
+    //             return false;
+    //         }
+    //         this.initComponent(nextProps)
+    //         return true;
+    //     }
+    //     if(nextProps.entityItemCode && nextProps.entityCode){
+    //         if(nextProps.entityItemCode === this.props.entityItemCode && nextProps.entityCode === this.props.entityCode){
+    //             return false;
+    //         }
+    //         this.initComponent(nextProps)
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     initComponent = (nextProps) => {
         let propsObj = nextProps || this.props;
@@ -169,44 +169,29 @@ class MdmRefComp extends Component {
             url += 'grid';
             params.pageSize = this.pageSize
             params.pageIndex = this.currPageIndex
-        }else if(type === 'tree'){
-            url += 'tree';
-        }else if(type === 'treegrid'){
-            url += 'treegrid';
-            params.pageSize = this.pageSize
-            params.pageIndex = this.currPageIndex
         }
-        request(url,{
-            method: "GET",
-            param: params
-        }).then(( resp ) =>{
+       
             let columnsData= [];
             let tableData = [];
             let treeData = [];
             let gridDataObj,treeDataObj,pkField,writeField;
+            gridDataObj = {
+                data: [],
+                header: [],
+                pkField:"",
+                writeField: ""
+            };
             if(type === 'grid'){
-                this.pageCount = resp.data.pageCount;
-                this.totalElements = resp.data.total;
-            }else if(type === 'treegrid'){
-                this.pageCount = resp.data.gridData.pageCount;
-                this.totalElements = resp.data.gridData.total;
+                this.pageCount = gridDataObj.pageCount;
+                this.totalElements = gridDataObj.total;
             }
-            if(type === 'grid' || type === 'treegrid'){
-                gridDataObj = resp.data;
-                if(type === 'treegrid'){
-                    gridDataObj = resp.data.gridData;
-                }
+            if(type === 'grid'){
+                //gridDataObj = resp.data;
+                
                 pkField = gridDataObj.pkField;
                 writeField = gridDataObj.writeField;
             }
-            if(type === 'tree'  || type === 'treegrid'){
-                treeDataObj = resp.data;
-                if(type === 'treegrid'){
-                    treeDataObj = resp.data.treeData;
-                }
-                pkField = treeDataObj.pkField;
-                writeField = treeDataObj.writeField;
-            }
+            
 
             function transData(data) {    
                 var newdata = [];
@@ -250,7 +235,7 @@ class MdmRefComp extends Component {
                 data = newdata;
               return data;
             }
-            if(type === 'grid' || type === 'treegrid'){
+            if(type === 'grid'){
                 tableData = gridDataObj.data;
                 let header = gridDataObj.header;
                 for(let i = 0; i < header.length; i++){
@@ -264,11 +249,6 @@ class MdmRefComp extends Component {
                     }
                 }
             }
-            if(type === 'tree'  || type === 'treegrid'){
-                treeData = treeDataObj.data;
-                treeData = transData(treeData);
-            }
-            
             this.setState({
                 pkField: pkField,
                 writeField: writeField,
@@ -278,14 +258,7 @@ class MdmRefComp extends Component {
                 showLoading: false
             })
             this.forceUpdate()
-        }).catch(() =>{
-            this.setState({
-                columnsData: [],
-                tableData: [],
-                treeData: [],
-                showLoading: false
-            });
-        });
+       
     }
 
     getRender(props,refProps){
@@ -303,33 +276,6 @@ class MdmRefComp extends Component {
             // {...refProps}
             // >   
             //     <RefMultipleTableBaseUI/>
-            // </RefWithInput>
-        }else if(type === 'tree'){
-            return <RefTreeWithInput 
-                theme=""
-                {...props}
-                {...refProps}
-                >   
-            </RefTreeWithInput>
-            // return <RefWithInput 
-            // {...props}
-            // {...refProps}
-            // >   
-            //     <RefTreeBaseUI/>
-            // </RefWithInput>
-
-        }else if(type === 'treegrid'){
-            return <RefTreeTableWithInput 
-                theme=""
-                {...props}
-                {...refProps}
-                >   
-            </RefTreeTableWithInput>
-            // return <RefWithInput 
-            // {...props}
-            // {...refProps}
-            // >   
-            //     <RefTreeTableBaseUI/>
             // </RefWithInput>
         }else{
             return <div></div>
@@ -356,10 +302,6 @@ class MdmRefComp extends Component {
             let url = '/iuapmdm/reference/mdmref/'
             params['type_code'] = key
             if(type === 'grid'){
-                url += 'gridname';
-            }else if(type === 'tree'){
-                url += 'treename';
-            }else if(type === 'treegrid'){
                 url += 'gridname';
             }
             request(url,{
@@ -451,43 +393,6 @@ class MdmRefComp extends Component {
                         tableKey: key
                     })
                     this.getData(key)
-                }
-            });
-        }else if(type === 'tree'){
-            refProps = Object.assign({},{
-                showLoading: showLoading,
-                nodeDisplay: "{" + writeField + "}",
-                searchable: false, 
-                treeData: treeData
-            });
-        }else if(type === 'treegrid'){
-            refProps = Object.assign({},{
-                showLoading: showLoading,
-                nodeDisplay: "{" + writeField + "}",
-                treeData: treeData,
-                columnsData: columnsData,
-                tableData: tableData,
-                page:{
-                    pageCount: this.pageCount,
-                    totalElements: this.totalElements,
-                    pageSize: this.pageSize,
-                    currPageIndex: (this.currPageIndex -1)
-                },
-                loadTableData: this.loadTableData,
-                onTableSearch: (key) =>{
-                    this.setState({
-                        tableKey: key
-                    })
-                    this.getData(key, this.state.treeNodePk)
-                },
-                condition: new Date().getTime(),
-                searchable: false,
-                onTreeChange:(treeNodes) =>{
-                    let key = treeNodes[0].refpk;
-                    this.setState({
-                        treeNodePk: key
-                    })
-                    this.getData(this.state.tableKey,key)
                 }
             });
         }
