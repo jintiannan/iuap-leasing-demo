@@ -92,7 +92,7 @@ class GridMain extends Component {
         let sheetIsRowFilter = this.props.sheetIsRowFilter != undefined ? this.props.sheetIsRowFileter : false,   //行样式不加为false
         sheetName = this.props.sheetName != undefined ? this.props.sheetName : "sheet",   //页签名称默认为sheet
         _sheetHeader = this.props.sheetHeader,
-        exportData = this.props.exportData.length>0 ? this.props.exportData:this.props.data,
+        exportData = this.props.exportData && this.props.exportData.length>0 ? this.props.exportData:this.props.data,
         exportFileName = this.props.exportFileName;
 
         if(key == '2'){   //key为2则导出当前页列表数据

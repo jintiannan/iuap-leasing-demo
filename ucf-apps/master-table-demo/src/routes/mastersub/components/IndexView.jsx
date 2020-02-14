@@ -5,7 +5,7 @@
 import React, { Component } from 'react';
 import { Loading,Form } from 'tinper-bee';
 import {actions} from 'mirrorx';
-import {singleRecordOper} from "utils/service";
+import {singleRecordOper, multiRecordOper} from "utils/service";
 import { deepClone,Info } from "utils";
 import ButtonGroup from './ButtonGroup';
 import ListView from './ListView';
@@ -240,10 +240,8 @@ class IndexView extends Component {
     /**
      * 导出数据按钮 使用GridMain组件中定义的引用ref直接调用即可导出数据
      */
-    onClickExport = () => {
-        console.log(this.refs);
-        console.log(this.listchild);
-        this.listchild.refs.mainlist.exportExcel();
+    onClickExport = (key) => {
+        this.listchild.setExportList(key);
     }
 
     /**

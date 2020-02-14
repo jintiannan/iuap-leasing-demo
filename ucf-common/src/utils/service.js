@@ -105,6 +105,7 @@ export function genGridColumn(param){
                     sorter: (pre, after) => {return pre[key] - after[key]},
                     className:'column-number-right',
                     render: (text, record, index) => {
+                        //这里不需要toString  数值 + string 自动类型提升为 string类型
                         return (<span style={{'float':'right'}}>{(typeof text)==='number'? (text*100).toFixed(digit)+'%':""}</span>)
                     }
                 };
@@ -405,7 +406,8 @@ var changeData = function changeData(data, filter, column) {
                 let data = obj[filter[i]] ? obj[filter[i]].toFixed(column[i].digit) :"";
                 one.push(data);
              }else if(column[i].type == 'percent'){
-                let data = obj[filter[i]] ? (obj[filter[i]] * 100).toFixed(column[i].digit).toString + '%' : "";
+                //这里不需要toString  数值 + string 自动类型提升为 string类型
+                let data = obj[filter[i]] ? (obj[filter[i]] * 100).toFixed(column[i].digit) + '%' : "";
                 one.push(data);
              }else if(column[i].type == 'currency'){
                 let data = obj[filter[i]] ? obj[filter[i]].toFixed(column[i].digit).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'):"";

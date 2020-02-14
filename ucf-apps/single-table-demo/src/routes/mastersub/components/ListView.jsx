@@ -3,6 +3,7 @@ import { actions } from 'mirrorx';
 import { deepClone, getHeight } from "utils";
 import { genGridColumn } from "utils/service";
 import GridMain from 'components/GridMain';
+import {singleRecordOper, multiRecordOper} from "utils/service";
 import './index.less';
 
 class ListView extends Component {
@@ -85,7 +86,7 @@ class ListView extends Component {
                 });
             }
         }
-        actions.calculatorNormalzt.updateState({ list: _list, selectedList: _selectedList, formObject: _formObj });
+        actions.calculatorNormalzt.updateState({ list: _list, selectedList: _selectedList, formObject: _formObj, exportData: _selectedList });
 
     }
 
@@ -113,6 +114,20 @@ class ListView extends Component {
     }
 
     /**
+    * 导出方法调用 这里调用 gridref 模板里 exportExcel统一导出方法
+    */
+    setExportList = (key) => {
+        console.log(key);
+        if (key == '1') {   //key为1 默认为导出选中数据 先进行校验
+            multiRecordOper(this.props.selectedList, (param) => {  //选中数据校验  未选中无法导出
+                this.gridref.exportExcel(key);
+            });
+        } else if (key == '2') {  //key为2 默认为导出当前页数据
+            this.gridref.exportExcel(key);
+        }
+    }
+
+    /**
      * 主表  列属性定义 ifshow:false 不显示该列  默认全显示 true ,宽度可自定义 默认120
      * title 表头
      * key 取值字段
@@ -122,16 +137,16 @@ class ListView extends Component {
         { title: '操作日期', key: 'operate_date', type: '0' },
         { title: '测算方案名称', key: 'quot_name', type: '0' },
         { title: '投放日期', key: 'plan_date_loan', type: '0' },
-        { title: '计划投放金额(元)', key: 'plan_cash_loan', type: '7' , digit: 2 },
-        { title: '租赁方式', key: 'lease_method',type: '6', enumType :'lease_method' },
+        { title: '计划投放金额(元)', key: 'plan_cash_loan', type: '7', digit: 2 },
+        { title: '租赁方式', key: 'lease_method', type: '6', enumType: 'lease_method' },
         { title: '租赁期限(月)', key: 'lease_times', type: '0' },
-        { title: '租赁本金', key: 'fact_cash_loan', type: '7' , digit: 2 },
-        { title: '保证金金额(元)', key: 'deposit_cash', type: '7' , digit: 2},
-        { title: '手续费总金额(元)', key: 'srvfee_cash_in', type: '7' , digit: 2},
-        { title: '会计IRR按最新算法', key: 'finace_irr_method', type: '6', enumType :'yesOrNo' },
-        { title: '会计IRR算法启用年份', key: 'finace_irr_year', type: '6', enumType :'yesOrNo' },
-        { title: '市场IRR', key: 'project_irr', type: '1' , digit: 2},
-        { title: '会计IRR', key: 'finance_irr', type: '1' , digit: 2},
+        { title: '租赁本金', key: 'fact_cash_loan', type: '7', digit: 2 },
+        { title: '保证金金额(元)', key: 'deposit_cash', type: '7', digit: 2 },
+        { title: '手续费总金额(元)', key: 'srvfee_cash_in', type: '7', digit: 2 },
+        { title: '会计IRR按最新算法', key: 'finace_irr_method', type: '6', enumType: 'yesOrNo' },
+        { title: '会计IRR算法启用年份', key: 'finace_irr_year', type: '6', enumType: 'yesOrNo' },
+        { title: '市场IRR', key: 'project_irr', type: '1', digit: 2 },
+        { title: '会计IRR', key: 'finance_irr', type: '1', digit: 2 },
         { title: '机构', key: 'pkOrg.name', type: '5' },
     ]
     //主表 列属性定义=>通过前端service工具类自动生成
@@ -149,7 +164,7 @@ class ListView extends Component {
         return (
             <div className="grid-parent" style={{ display: this.state.listView }}>
                 <div>
-                {/**
+                    {/**
                     标准表格组件定义GridMain
                     ref:当前表格引用名称 {}直接添加"name" 使用this.name 获取表格内部数据
                     columns:列标题
@@ -164,16 +179,16 @@ class ListView extends Component {
                     getSelectedDataFunc:选中数据触发事件
                  */}
                     <GridMain
-                        ref="mainlist" //存模版
+                        ref={(el) => this.gridref = el} //存模版
                         columns={this.gridColumn} //字段定义
                         data={this.props.list} //数据数组                     
                         tableHeight={2} //表格高度 1主表 2单表 3子表, 4报表
-                        exportFileName="测试导出表格"　    //导出表格名称
-                        exportData={this.props.list}      //导出表格数据
+                        exportFileName="单表导出数据"　    //导出表格名称
+                        exportData={this.props.exportData}      //导出表格数据
                         //分页对象
                         paginationObj={{
-                            dataNumSelect:['15','25','50','100'],        //每页显示条数动态修改
-                            dataNum:this.props.queryParam.dataNum,            //每页显示条数Index
+                            dataNumSelect: ['15', '25', '50', '100'],        //每页显示条数动态修改
+                            dataNum: this.props.queryParam.dataNum,            //每页显示条数Index
                             activePage: this.props.queryParam.pageIndex,//活动页
                             total: this.props.list.length,//总条数
                             items: this.props.queryObj.totalPages,//总页数

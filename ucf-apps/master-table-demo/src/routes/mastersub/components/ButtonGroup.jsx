@@ -95,8 +95,7 @@ class ButtonGroup extends Component {
     }
 
     handleSelect = ({ key }) =>{
-        console.log(`${key} selected`);
-        this.props.Export();
+        this.props.Export(key);
     }
 
     /**
@@ -117,9 +116,7 @@ class ButtonGroup extends Component {
                 <Divider />
                 <Item key="1">导出选中数据</Item>
                 <Divider />
-                <Item key="2">导出全部数据</Item>
-                <Divider />
-                <Item key="3">导出当前页 </Item>
+                <Item key="2">导出当前页</Item>
                 <Divider />
             </Menu>
         );

@@ -235,13 +235,11 @@ class IndexView extends Component {
         });
     }
 
-    /**
+     /**
      * 导出数据按钮 使用GridMain组件中定义的引用ref直接调用即可导出数据
      */
-    onClickExport = () => {
-        console.log(this.refs);
-        console.log(this.listchild);
-        this.listchild.refs.mainlist.exportExcel();
+    onClickExport = (key) => {
+        this.listchild.setExportList(key);
     }
 
     /**
