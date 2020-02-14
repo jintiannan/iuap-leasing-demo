@@ -40,11 +40,11 @@ class GridMain extends Component {
      */
     resetTableHeight = (isopen) => {
         let tableHeightMain = 0;
-        tableHeightMain = getHeight() * 0.4;
+        tableHeightMain = getHeight() * 0.47;
         this.setState({ tableHeightMain });
 
         let tableHeightChild = 0;
-        tableHeightChild = getHeight() * 0.27;
+        tableHeightChild = getHeight() * 0.20;
         this.setState({ tableHeightChild });
 
         let tableHeightSingle = 0;

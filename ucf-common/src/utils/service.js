@@ -105,7 +105,7 @@ export function genGridColumn(param){
                     sorter: (pre, after) => {return pre[key] - after[key]},
                     className:'column-number-right',
                     render: (text, record, index) => {
-                        return (<span style={{'float':'right'}}>{(typeof text)==='number'? (text * 100).toFixed(digit).toString + '%':""}</span>)
+                        return (<span style={{'float':'right'}}>{(typeof text)==='number'? (text*100).toFixed(digit)+'%':""}</span>)
                     }
                 };
             case TYPE_DATE :
@@ -329,7 +329,7 @@ export function consoleData(result = [], param = {}, method, subname){
                 updateData.list = data.pageData;
             }else{
                 if(subname != null && subname != undefined){
-                    updateData.list2 = data[subname] == null? []: data[subname];
+                    updateData.list2 = data[subname] == undefined || data[subname] == null ? []: data[subname];
                 }else{
                     updateData.list2 = data;
                 }  

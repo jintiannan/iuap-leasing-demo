@@ -119,7 +119,7 @@ class TableTreeRef extends Component {
                         ...getFieldProps(this.props.name, {   //因为参照的值特殊 此处特殊处理传值后再重写了getFieldProps
                           initialValue: value,
                           rules: [{
-                            message: '请选择对应的'+this.props.formObject[this.props.name]['name'],
+                            message: '',
                           }]
                         })
                     }

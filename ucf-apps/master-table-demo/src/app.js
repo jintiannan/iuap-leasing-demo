@@ -13,7 +13,6 @@ import './app.less';
 mirror.defaults({
     historyMode: "hash"
 });
-
 render(<Router>
     <Routes />
 </Router>, document.querySelector("#app"));

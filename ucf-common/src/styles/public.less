@@ -126,8 +126,9 @@
   }
 
 .jic-form {
+    //主子表 form表单样式
     .jic-form-content{
-        height: calc(100vh*0.88);
+        height: calc(100vh*0.55);
         overflow: scroll;
         .u-panel{
             margin-bottom:0 ;
@@ -149,8 +150,33 @@
         }
     }
 
+    //计提 form表单样式
     .jic-form-content-accrued{
         height: calc(100vh*0.23);
+        overflow: scroll;
+        .u-panel{
+            margin-bottom:0 ;
+        }
+        .u-panel-heading{
+            background: #fff;
+            height: 32px;
+        }
+        .u-panel-title{
+            font-size: 12px;
+            color: #333333;
+            font-weight: 600;
+        }
+        .u-panel-body{
+            background-color: #ebecec;
+            .ref-red .u-form-control[disabled] {
+                background:#F7F9FB;
+            }
+        }
+    }
+
+    //单表 form表单样式
+    .jic-form-content-single{
+        height: calc(100vh*0.88);
         overflow: scroll;
         .u-panel{
             margin-bottom:0 ;
@@ -248,6 +274,9 @@
     .steps-content{
         min-height: 400px;
     }
+    .steps-content-master{
+        min-height: 200px;
+    }
     .steps-content-accrued{
         min-height: 80px;
     }
@@ -325,5 +354,33 @@
 //开票导入 按钮样式
 .button-upload {
     float: right;
+}
+
+// 卡片页 子表修改 弹出页面 样式
+.plan_modal_form{
+    margin: 5px 15px;
+    // .modal_header{
+    //     border-radius: 8px 8px 0px 0px;
+    //     background-color: #c1c7d0;
+    //     .u-modal-header{
+    //         padding: 3px;
+    //     }
+    // }
+    .u-modal-content{
+        border-radius:8px;
+        border: none;
+    }
+    .steps-contents {
+        .u-form{
+          height: auto !important;
+          overflow: auto;
+          text-align: right;
+        }
+    }
+  }
+// 卡片页 子表修改 弹出页面 样式 按钮右对齐 yjj
+.steps-action{
+    padding-top: 10px;
+    text-align: right;
 }
    
