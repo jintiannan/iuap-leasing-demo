@@ -13,7 +13,9 @@ module.exports = (env, argv) => {
         // bootList: true,
         // 启动这两个模块，启动调试、构建
         bootList: [
-            "singletable-query"
+            "singletable-query",
+            "single-table-demo",
+            "master-table-demo",
         ],
         // 代理的配置
         proxy: [
