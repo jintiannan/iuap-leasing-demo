@@ -7,12 +7,12 @@ import React from "react";
 import {Route} from "mirrorx";
 
 import MultiLeftContainer from './multitab-query-left/container'
-//import MultiTopContainer from './multitab-query-top/container'
+import {MultiTopContainer} from './multitab-query-top/container'
 
 export default () => (
     <div className="route-content">
         <Route exact path="/multitab-query-left" component={MultiLeftContainer}/>
-        {/*<Route exact path="/mutlitab-query-top" component={MultiTopContainer}/>*/}
+        <Route exact path="/multitab-query-top" component={MultiTopContainer}/>
     </div>
 
 )

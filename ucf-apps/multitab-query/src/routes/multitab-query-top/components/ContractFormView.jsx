@@ -6,7 +6,7 @@ import FormInputNumber from 'components/FormRef/FormInputNumber';
 import TableFormRef from 'components/FormRef/TableFormRef';
 import TableTreeRef from 'components/FormRef/TableTreeRef';
 import 'styles/public.less'
-import ButtonGroup from './ButtonGroup';
+import ContractButtonGroup from './ContractButtonGroup';
 const FormItem = Form.FormItem;
 
 class ContractFormView extends Component {
@@ -200,7 +200,7 @@ class ContractFormView extends Component {
         });
             return (
                 <div>
-                    <div><ButtonGroup BtnPower= {ButtonPower}  ></ButtonGroup></div>
+                    <div><ContractButtonGroup BtnPower= {ButtonPower}  ></ContractButtonGroup></div>
                     {/**
                       卡片页 内容 jic-form 统一公共样式
                       Panel 标签 点击折叠标签
