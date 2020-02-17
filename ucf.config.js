@@ -16,6 +16,7 @@ module.exports = (env, argv) => {
             "singletable-query",
             "single-table-demo",
             "master-table-demo",
+            "multitab-query",
         ],
         // 代理的配置
         proxy: [
